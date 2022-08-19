@@ -2,12 +2,12 @@
   <q-page class="row justify-center">
     <div class="col-8 text-center">
       <div class="text-h3">Crie seu novo post</div>
-      <pre>{{ newPost }}</pre>
+
       <q-form @submit="createPost" @reset="resetForm">
         <q-input label="Título" v-model="newPost.title" />
         <q-input label="Conteúdo" type="textarea" v-model="newPost.body" />
 
-        <q-btn flat label="Limpar" type="reset" />
+        <q-btn flat label="Limpar" color="primary" type="reset" />
         <q-btn label="Criar" color="primary" type="submit" />
       </q-form>
     </div>
@@ -20,15 +20,16 @@ import { useQuasar } from 'quasar'
 import { usePostsStore } from 'src/stores/posts-store'
 import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 
 
 export default defineComponent({
   name: 'PostPage',
   async setup() {
     const $q = useQuasar()
+    const router = useRouter()
     const postStore = usePostsStore()
     const userStore = useUserStore()
-    // const { user } = storeToRefs(userStore)
 
     const newPost = reactive({
       title: '',
@@ -47,8 +48,10 @@ export default defineComponent({
 
       if (done) {
         resetForm()
+        router.push('/')
         $q.notify({
           message: 'Post criado com sucesso!',
+          type: 'positive',
           icon: 'check',
           progress: true,
         })
