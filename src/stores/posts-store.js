@@ -22,6 +22,7 @@ export const usePostsStore = defineStore('posts', {
       }
       catch (err) {
         console.log(err.response.data)
+        throw new Error(err.response.data)
       }
       finally {
         Loading.hide()
@@ -35,8 +36,9 @@ export const usePostsStore = defineStore('posts', {
 
         this.fullPost = {...post, comments: postComments, author: author}
 
-      } catch (error) {
-        console.log(error.response.data)
+      } catch (err) {
+        console.log(err.response.data)
+        throw new Error(err.response.data)
       }
       finally {
         Loading.hide()
@@ -50,6 +52,7 @@ export const usePostsStore = defineStore('posts', {
         }
       } catch (err) {
         console.log(err.response.data)
+        throw new Error(err.response.data)
       }
       finally {
         Loading.hide()
@@ -62,6 +65,7 @@ export const usePostsStore = defineStore('posts', {
         if (post) return true
       } catch (err) {
         console.log(err.response.data)
+        throw new Error(err.response.data)
       }
       finally {
         Loading.hide()
