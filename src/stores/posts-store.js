@@ -71,6 +71,19 @@ export const usePostsStore = defineStore('posts', {
         Loading.hide()
 
       }
+    },
+    async deletePost (id) {
+      try {
+        const {data} = await api.delete(`/posts/${id}`)
+        if (!data) {
+          return true
+        }
+      } catch (err) {
+        console.log(err.response.data)
+        throw new Error(err.response.data)
+      } finally {
+        Loading.hide()
+      }
     }
   }
 })
