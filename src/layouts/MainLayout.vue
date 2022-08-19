@@ -6,7 +6,11 @@
           @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          Posts
+          <div v-if="goBack">
+            <q-btn icon="arrow_back" label="Voltar" @click="goBackPage" flat
+              rounded />
+          </div>
+          <div v-else>Posts</div>
         </q-toolbar-title>
 
         <div v-if="isAuthenticated">
@@ -42,7 +46,7 @@
             </q-item-section>
           </q-item>
 
-          <q-item clickable to="/user/form">
+          <q-item clickable to="/post/new">
             <q-item-section avatar>
               <q-icon :name="`article`" />
             </q-item-section>
@@ -72,7 +76,7 @@
         </q-item>
 
 
-        <q-item clickable to="/user/view">
+        <q-item clickable v-if="isAuthenticated" to="/user/view">
           <q-item-section avatar>
             <q-icon :name="`person`" />
           </q-item-section>
@@ -95,12 +99,12 @@
           </q-item-section>
         </q-item> -->
 
-        <q-item clickable @click="logoutUser">
+        <q-item clickable v-if="isAuthenticated" @click="logoutUser">
           <q-item-section avatar>
             <q-icon :name="`logout`" />
           </q-item-section>
 
-          <q-item-section v-if="isAuthenticated">
+          <q-item-section>
             <q-item-label>{{ `Logout` }}</q-item-label>
             <q-item-label caption>{{ `Finalizar sessão` }}</q-item-label>
           </q-item-section>
@@ -183,22 +187,29 @@ export default defineComponent({
   name: 'MainLayout',
 
   components: {},
-
+  props: {
+    goBack: { type: Boolean }
+  },
   setup() {
     const leftDrawerOpen = ref(false)
     const store = useUserStore()
     const router = useRouter()
     const { user, isAuthenticated } = storeToRefs(store)
 
+    const goBackPage = () => {
+      router.go(-1)
+    }
+
     const logoutUser = () => {
       Dialog.create({
         title: 'Logout',
         message: 'Deseja realmente encerrar sua sessão?',
         ok: {
-          label: 'sair'
+          label: 'sair',
         },
         cancel: {
-          label: 'cancelar'
+          label: 'voltar',
+          flat: true
         },
         persistent: true
       }).onOk(() => {
@@ -216,6 +227,7 @@ export default defineComponent({
       isAuthenticated,
       leftDrawerOpen,
       logoutUser,
+      goBackPage,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }

@@ -5,7 +5,8 @@
         <div class="col">
           <div class="text-h6 ellipsis" no-padding>{{ post.title }}</div>
         </div>
-        <div class="col-auto">
+        <div class="col-auto"
+          v-if="isAuthenticated && post.user_id === user.id">
           <q-btn color="grey-7" round flat icon="more_vert">
             <q-menu cover auto-close>
               <q-list>
@@ -37,6 +38,8 @@
 </template>
 
 <script>
+import { storeToRefs } from 'pinia';
+import { useUserStore } from 'src/stores/user-store';
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -47,6 +50,14 @@ export default defineComponent({
       required: true
     }
   },
-  setup() { }
+  setup() {
+    const userStore = useUserStore()
+    const { isAuthenticated, user } = storeToRefs(userStore)
+
+
+    return {
+      isAuthenticated, user
+    }
+  }
 })
 </script>
