@@ -25,17 +25,18 @@
 
 <script>
 import { defineComponent, reactive } from 'vue'
-import { api } from 'boot/axios'
 
-import { Notify } from 'quasar'
+import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { useUserStore } from 'src/stores/user-store'
 
 export default defineComponent({
   name: 'UserForm',
-  async setup() {
-    const store = useUserStore()
+  setup() {
+    const $q = useQuasar()
+    const userStore = useUserStore()
     const router = useRouter()
+
     const genderOptions = [
       {
         label: 'Masculino',
@@ -46,7 +47,6 @@ export default defineComponent({
         value: 'female'
       },
     ]
-
     const form = reactive({
       email: '',
       name: '',
@@ -55,25 +55,12 @@ export default defineComponent({
     })
 
     const onSubmit = async () => {
-      try {
-        const dataUser = await api.post(`users/`, form)
-        const newUser = dataUser.data
-
-        console.log(newUser)
-
-        store.$patch(state => {
-          state.user = newUser
-          state.isAuthenticated = true
-        })
-
+      $q.loading.show()
+      const result = await userStore.createUser(form)
+      if (result) {
         onReset()
-      } catch (error) {
-        console.log(error)
-        throw error.response.data
-      } finally {
-
-        router.push('/login')
-        Notify.create({
+        router.push('/')
+        $q.notify.create({
           message: 'Usuário criado com sucesso!',
           icon: 'check',
           progress: true,
@@ -87,10 +74,6 @@ export default defineComponent({
       form.name = ''
       form.gender = ''
     }
-
-    const user = { id: 5209, name: "xur", email: "user@gmail.com", gender: "female", status: "active" }
-
-
 
     return { form, genderOptions, onSubmit, onReset }
   },
