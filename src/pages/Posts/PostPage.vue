@@ -96,33 +96,6 @@ export default defineComponent({
 
     }
 
-    // const sendComment = async () => {
-    //   debugger
-    //   try {
-    //     const payload = {
-    //       post_id: postId,
-    //       name: user.name,
-    //       email: user.email,
-    //       body: comment.value
-    //     }
-
-    //     const response = await api.post(`/comments`, payload)
-    //     const newPost = response.data
-
-    //     $q.notify({
-    //       message: 'Post enviado!',
-    //       icon: 'check',
-    //       type: 'positive',
-    //       progress: true,
-    //     })
-
-    //     console.log(newPost)
-
-    //   } catch (err) {
-    //     console.log(err)
-    //   }
-    // }
-
     return {
       fullPost,
       comment,
