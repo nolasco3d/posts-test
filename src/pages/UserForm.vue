@@ -60,7 +60,7 @@ export default defineComponent({
       if (result) {
         onReset()
         router.push('/')
-        $q.notify.create({
+        $q.notify({
           message: 'Usuário criado com sucesso!',
           icon: 'check',
           progress: true,

@@ -43,7 +43,7 @@ export default defineComponent({
 
     const createPost = async () => {
       $q.loading.show()
-      debugger
+
       const done = await postStore.createNewPost({ newPost, id: userStore.user.id })
 
       if (done) {

@@ -2,8 +2,8 @@
   <q-page class="row flex-center">
     <div class="col-4 text-center">
       <div>Já está cadastrado? <br /> Faça seu login.</div>
-      <q-form @submit="onSubmit">
-        <q-input class="" label="E-mail" v-model="email" />
+      <q-form @submit="onSubmit" @reset="onReset">
+        <q-input label="E-mail" v-model="email" />
         <div class="q-mt-md">
           <q-btn label="Logar" type="submit" color="primary" flat />
         </div>
@@ -19,46 +19,26 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { useUserStore } from 'src/stores/user-store'
-import { api } from 'src/boot/axios'
 
-import { Notify } from 'quasar'
+import { Notify, useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
-
-
 
 export default defineComponent({
   name: 'UserForm',
   async setup() {
-    const store = useUserStore()
+    const $q = useQuasar()
+    const userStore = useUserStore()
     const email = ref('')
     const router = useRouter()
 
 
     const onSubmit = async () => {
-      try {
-        const dataUser = await api.get(`users?email=${email.value}`)
-        // .then(res => {
-        //   // TODO: TREAT MULTIPLES RESULTS
-        //   if (res.data.length === 1) {
-        //     store.$patch(state => {
-        //       state.isAuthenticated = true
-        //       state.user = res.data[0]
-        //     })
-        //     return true
-        //   }
-        // })
-        debugger
-        const [user] = dataUser.data
-        store.$patch(state => {
-          state.isAuthenticated = true
-          state.user = user
-        })
+      $q.loading.show()
 
-        console.log(dataUser)
-      } catch (error) {
-        console.log(error)
-      }
-      finally {
+      const logged = await userStore.loginUser(email.value)
+
+      if (logged) {
+        onReset()
         router.push('/')
         Notify.create({
           message: 'Logado com sucesso!',
@@ -66,23 +46,27 @@ export default defineComponent({
           progress: true,
           type: 'positive'
         })
-
+      } else {
+        onReset('')
+        Notify.create({
+          message: 'Usuário não encontrado!',
+          icon: 'error',
+          progress: true,
+          type: 'negative',
+          position: 'center'
+        })
       }
+
     }
 
-    // function onReset() {
-    //   form = {
-    //     email: '',
-    //     name: '',
-    //     gender: '',
-    //     status: 'active'
-    //   }
-    // }
+    function onReset() {
+      email.value = ''
+    }
 
     return {
-      store,
       email,
-      onSubmit
+      onSubmit,
+      onReset
     }
   },
 })

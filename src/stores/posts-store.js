@@ -59,7 +59,6 @@ export const usePostsStore = defineStore('posts', {
       }
     },
     async createNewPost ({newPost, id}) {
-      debugger
       try {
         const {data: post} = await api.post(`/users/${id}/posts`, newPost)
         if (post) return true
