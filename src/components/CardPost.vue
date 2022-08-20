@@ -10,12 +10,12 @@
           <q-btn color="grey-7" round flat icon="more_vert">
             <q-menu cover auto-close>
               <q-list>
-                <q-item clickable @click="deletePost(post.id)">
+                <q-item clickable @click="modalDelete(post.id)">
                   <q-item-section>Delete this post</q-item-section>
                 </q-item>
 
-                <q-item clickable>
-                  <q-item-section>Edit post</q-item-section>
+                <q-item clickable @click="sendToEdit(post)">
+                  <q-item-section>Editar post</q-item-section>
                 </q-item>
 
               </q-list>
@@ -43,6 +43,7 @@ import { useQuasar } from 'quasar';
 import { usePostsStore } from 'src/stores/posts-store';
 import { useUserStore } from 'src/stores/user-store';
 import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'CardPost',
@@ -56,6 +57,7 @@ export default defineComponent({
     const $q = useQuasar()
     const userStore = useUserStore()
     const postStore = usePostsStore()
+    const router = useRouter()
     const { isAuthenticated, user } = storeToRefs(userStore)
 
     const deletePost = async (id) => {
@@ -66,24 +68,35 @@ export default defineComponent({
       }
     }
 
-    const confirmDelet = () => {
+    const sendToEdit = (post) => {
+      router.push({
+        name: 'PostForm',
+        params: {
+          post: JSON.stringify(post)
+        }
+      })
+    }
+
+    const modalDelete = (id) => {
       $q.dialog({
         message: 'Deseja excluir esse post? Essa ação é irreversível!',
         ok: {
           label: 'Apagar',
-          color: 'negative'
+          color: 'red'
         },
         cancel: {
-          label: 'Cancelar'
+          label: 'Cancelar',
+          flat: true,
+          color: 'primary'
         }
-      })
+      }).onOk(async () => deletePost(id))
     }
 
     return {
       isAuthenticated,
       user,
-      deletePost,
-      confirmDelet
+      modalDelete,
+      sendToEdit
     }
   }
 })

@@ -6,6 +6,9 @@
         <CardPost class="full-width" v-for="(post) in posts" :key="post.id"
           :post="post" />
       </div>
+      <div class="row">
+        <q-pagination v-model="currentPage" :max="6" />
+      </div>
 
     </div>
   </q-page>
@@ -13,7 +16,7 @@
 
 
 <script>
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import CardPost from 'src/components/CardPost.vue';
 import { usePostsStore } from 'src/stores/posts-store';
 import { storeToRefs } from 'pinia';
@@ -26,14 +29,21 @@ export default defineComponent({
     const $q = useQuasar()
     const postStore = usePostsStore()
     const { posts } = storeToRefs(postStore)
+    const currentPage = ref(1)
 
     onMounted(async () => {
       $q.loading.show()
       await postStore.getPostsByPage()
     })
 
+    watch(currentPage, async (count) => {
+      $q.loading.show()
+      await postStore.getPostsByPage(count)
+    })
+
     return {
-      posts
+      posts,
+      currentPage
     }
   }
 })

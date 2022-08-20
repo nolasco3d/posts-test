@@ -2,8 +2,9 @@
   <q-page class="row flex-center">
     <div class="col-4 text-center">
       <div>Já está cadastrado? <br /> Faça seu login.</div>
-      <q-form @submit="onSubmit" @reset="onReset">
-        <q-input label="E-mail" v-model="email" />
+      <q-form @submit="beforeSubmit(v$)" @reset="onReset">
+        <q-input label="E-mail" v-model="v$.email.$model"
+          :error="v$.email.$error" error-message="Insira um email válido." />
         <div class="q-mt-md">
           <q-btn label="Logar" type="submit" color="primary" flat />
         </div>
@@ -17,25 +18,35 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import { useUserStore } from 'src/stores/user-store'
-
 import { Notify, useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
+import useVuelidate from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 
 export default defineComponent({
   name: 'UserForm',
-  async setup() {
+  setup() {
     const $q = useQuasar()
+
     const userStore = useUserStore()
-    const email = ref('')
     const router = useRouter()
+
+    const form = reactive({
+      email: ''
+    })
+
+    const rules = {
+      email: { required, email }
+    }
+
 
 
     const onSubmit = async () => {
       $q.loading.show()
 
-      const logged = await userStore.loginUser(email.value)
+      const logged = await userStore.loginUser(form.email)
 
       if (logged) {
         onReset()
@@ -56,17 +67,28 @@ export default defineComponent({
           position: 'center'
         })
       }
+    }
 
+    async function beforeSubmit(v) {
+      const isValid = await v.$validate()
+
+      if (!isValid) return
+
+      onSubmit()
     }
 
     function onReset() {
-      email.value = ''
+      form.email = ''
     }
 
+    const v$ = useVuelidate(rules, form)
+
     return {
-      email,
+      form,
       onSubmit,
-      onReset
+      onReset,
+      v$,
+      beforeSubmit
     }
   },
 })

@@ -46,7 +46,7 @@
             </q-item-section>
           </q-item>
 
-          <q-item clickable to="/post/new">
+          <q-item clickable to="/post/form">
             <q-item-section avatar>
               <q-icon :name="`article`" />
             </q-item-section>
@@ -206,6 +206,7 @@ export default defineComponent({
         message: 'Deseja realmente encerrar sua sessão?',
         ok: {
           label: 'sair',
+          color: 'red'
         },
         cancel: {
           label: 'voltar',

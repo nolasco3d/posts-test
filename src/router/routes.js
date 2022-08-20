@@ -13,9 +13,8 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: ':id', component: () => import('pages/Posts/PostPage.vue')},
-      { path: 'new', component: () => import('pages/Posts/PostForm.vue') },
-      { path: 'meus-posts', component: () => import('pages/Posts/UserPosts.vue') },
-      { path: ':id/edit', component: () => import('pages/Posts/EditPost.vue') }
+      { path: 'form', name: 'PostForm', component: () => import('pages/Posts/PostForm.vue') },
+      { path: 'meus-posts', component: () => import('pages/Posts/UserPosts.vue') }
     ]
   },
   // {

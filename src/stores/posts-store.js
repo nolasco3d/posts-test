@@ -83,6 +83,18 @@ export const usePostsStore = defineStore('posts', {
       } finally {
         Loading.hide()
       }
+    },
+    async updatePost (post, id) {
+      try {
+        const {data} = await api.patch(`/posts/${id}`, post)
+        console.log(data)
+        return true
+      } catch (err) {
+        console.log(err)
+        throw new Error(err)
+      } finally {
+        Loading.hide()
+      }
     }
   }
 })
