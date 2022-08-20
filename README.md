@@ -1,41 +1,40 @@
-# Post Test (posts-test)
+## Aplicação PostTest
 
-Test frontend
+### Requisitos
 
-## Install the dependencies
+Node 14+
+Yarn ou Npm
+Quasar CLI (Opcional)
+Para instalar o Quasar CLI globalmente basta usar o seguinte comando:
+
 ```bash
-yarn
+$ yarn global add @quasar/cli
 # or
-npm install
+$ npm install -g @quasar/cli
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Como rodar a aplicação
+
+Execute um comando para instalar as dependências
+
 ```bash
-quasar dev
+$ yarn install
+# ou
+$ npm install
 ```
 
+Basta rodar um comando para rodar
 
-### Lint the files
 ```bash
-yarn lint
-# or
-npm run lint
+$ yarn quasar dev
+# ou
+$ npx quasar dev
 ```
 
+## Stack
 
-### Format the files
-```bash
-yarn format
-# or
-npm run format
-```
-
-
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+VueJs 3 - Composition API
+Pinia
+Vue-Router
+Vuelidate 3
+Quasar Js
