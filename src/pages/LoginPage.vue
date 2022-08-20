@@ -1,6 +1,6 @@
 <template>
   <q-page class="row flex-center">
-    <div class="col-4 text-center">
+    <div class="col-12 col-md-4 col-lg-3 text-center q-pa-md">
       <div>Já está cadastrado? <br /> Faça seu login.</div>
       <q-form @submit="beforeSubmit(v$)" @reset="onReset">
         <q-input label="E-mail" v-model="v$.email.$model"
@@ -9,11 +9,11 @@
           <q-btn label="Logar" type="submit" color="primary" flat />
         </div>
       </q-form>
-    </div>
-    <div class="col-4 text-center">
+
       <div>Ou registre-se agora!</div>
       <q-btn label="Registrar" color="primary" to="/user/form" />
     </div>
+
   </q-page>
 </template>
 

@@ -1,12 +1,12 @@
 <template>
-  <q-page class="row flex-center log">
-    <div class="col-8">
+  <q-page class="row flex-center">
+    <div class="col-12 col-md-8 col-lg-6">
       <div class="row q-pa-md q-gutter-y-md" v-show="posts.length > 0">
         <div class="q-px-sm text-h3">Novos posts</div>
         <CardPost class="full-width" v-for="(post) in posts" :key="post.id"
           :post="post" />
       </div>
-      <div class="row">
+      <div class="row flex-center q-py-lg">
         <q-pagination v-model="currentPage" :max="6" />
       </div>
 

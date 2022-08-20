@@ -4,9 +4,12 @@
       <div class="text-h3" v-if="!editMode">Crie seu novo post</div>
       <div class="text-h3" v-else>Edite seu post</div>
 
-      <q-form @submit="createPost" @reset="resetForm">
-        <q-input label="Título" v-model="newPost.title" />
-        <q-input label="Conteúdo" type="textarea" v-model="newPost.body" />
+      <q-form @submit="beforeSubmit(v$)" @reset="resetForm">
+        <q-input label="Título" v-model="v$.title.$model"
+          :error="v$.title.$error" error-message="Insira um título." />
+        <q-input counter maxlength="250" label="Conteúdo" type="textarea"
+          v-model="v$.body.$model" :error="v$.body.$error"
+          error-message="Insira um texto válido." />
 
         <q-btn flat label="Limpar" color="primary" type="reset" />
         <q-btn :label="editMode ? 'Editar' : 'Criar'" color="primary"
@@ -26,6 +29,9 @@ import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+import useVuelidate from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
+
 
 export default defineComponent({
   name: 'PostPage',
@@ -35,16 +41,20 @@ export default defineComponent({
     const route = useRoute()
     const postStore = usePostsStore()
     const userStore = useUserStore()
-    let postId = null
+
     const editMode = ref(false)
-
-
-    let editPost = reactive({})
+    let postId = null
 
     const newPost = reactive({
       title: '',
       body: ''
     })
+    const rules = {
+      title: { required, minLength: minLength(6) },
+      body: { required, minLength: minLength(10) },
+    }
+
+    const v$ = useVuelidate(rules, newPost)
 
     const resetForm = () => {
       newPost.title = ''
@@ -55,7 +65,7 @@ export default defineComponent({
       $q.loading.show()
 
       const done = editMode.value ?
-        await postStore.updatePost(editPost, postId) :
+        await postStore.updatePost(newPost, postId) :
         await postStore.createNewPost({ newPost, id: userStore.user.id })
 
       if (done) {
@@ -80,13 +90,20 @@ export default defineComponent({
       }
     })
 
+    async function beforeSubmit(v) {
+      const isValid = await v.$validate()
+
+      if (!isValid) return
+
+      createPost()
+    }
+
     return {
-      createPost,
+      beforeSubmit,
       resetForm,
       newPost,
-      route,
-      editPost,
-      editMode
+      editMode,
+      v$
     }
   }
 })

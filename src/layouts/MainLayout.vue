@@ -34,18 +34,6 @@
             Posts
           </q-item-label>
 
-          <q-item clickable to="/post/meus-posts">
-            <q-item-section avatar>
-              <q-icon :name="`newspaper`" />
-            </q-item-section>
-
-            <q-item-section>
-              <q-item-label>{{ `Meus Posts` }}</q-item-label>
-              <q-item-label caption>{{ `Listagem dos seus posts` }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-
           <q-item clickable to="/post/form">
             <q-item-section avatar>
               <q-icon :name="`article`" />
@@ -58,7 +46,6 @@
           </q-item>
         </template>
 
-        <!-- TODO: Create component to wrap repetitions -->
         <q-item-label header>
           Acesso rápido
         </q-item-label>
@@ -76,29 +63,6 @@
         </q-item>
 
 
-        <q-item clickable v-if="isAuthenticated" to="/user/view">
-          <q-item-section avatar>
-            <q-icon :name="`person`" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>{{ `Minha Conta` }}</q-item-label>
-            <q-item-label caption>{{ `Informações da conta` }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <!-- <q-item clickable to="/post">
-          <q-item-section avatar>
-            <q-icon :name="`create`" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>{{ `Create` }}</q-item-label>
-            <q-item-label caption>{{ `caption` }}</q-item-label>
-          </q-item-section>
-        </q-item> -->
-
         <q-item clickable v-if="isAuthenticated" @click="logoutUser">
           <q-item-section avatar>
             <q-icon :name="`logout`" />
@@ -109,10 +73,6 @@
             <q-item-label caption>{{ `Finalizar sessão` }}</q-item-label>
           </q-item-section>
         </q-item>
-
-
-
-
 
       </q-list>
     </q-drawer>
@@ -136,52 +96,6 @@ import { Dialog, Notify } from 'quasar'
 import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-// import EssentialLink from 'components/EssentialLink.vue'
-
-// const linksList = [
-//   {
-//     title: 'New Post',
-//     caption: 'Create a new post',
-//     icon: 'school',
-//     link: 'https://quasar.dev'
-//   },
-//   {
-//     title: 'Github',
-//     caption: 'github.com/quasarframework',
-//     icon: 'code',
-//     link: 'https://github.com/quasarframework'
-//   },
-//   {
-//     title: 'Discord Chat Channel',
-//     caption: 'chat.quasar.dev',
-//     icon: 'chat',
-//     link: 'https://chat.quasar.dev'
-//   },
-//   {
-//     title: 'Forum',
-//     caption: 'forum.quasar.dev',
-//     icon: 'record_voice_over',
-//     link: 'https://forum.quasar.dev'
-//   },
-//   {
-//     title: 'Twitter',
-//     caption: '@quasarframework',
-//     icon: 'rss_feed',
-//     link: 'https://twitter.quasar.dev'
-//   },
-//   {
-//     title: 'Facebook',
-//     caption: '@QuasarFramework',
-//     icon: 'public',
-//     link: 'https://facebook.quasar.dev'
-//   },
-//   {
-//     title: 'Quasar Awesome',
-//     caption: 'Community Quasar projects',
-//     icon: 'favorite',
-//     link: 'https://awesome.quasar.dev'
-//   }
-// ]
 
 export default defineComponent({
   name: 'MainLayout',

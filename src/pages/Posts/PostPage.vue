@@ -1,8 +1,8 @@
 <template>
   <q-page class="row justify-center">
-    <div class="col-8">
-      <div class="row" v-if="fullPost">
-        <div class="col-12">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="row q-pa-md" v-if="fullPost">
+        <div class="col-12 q-py-lg">
           <div class="text-h3 q-mb-md">{{ fullPost.title || 'Título do post' }}
           </div>
           <div class="body">{{ fullPost.body }}</div>
@@ -32,10 +32,10 @@
               </q-list>
             </q-card-section>
           </q-card>
-          <div v-if="isAuthenticated">
+          <div v-if="isAuthenticated" class="">
             <div>Deixe seu comentário:</div>
             <q-form @submit="sendComment">
-              <div class=" text-right" style="max-width: 600px;">
+              <div class=" text-right">
                 <q-input label="Comentário" type="textarea" v-model="comment" />
 
                 <q-btn class="q-mt-md" color="primary" label="Comentar"

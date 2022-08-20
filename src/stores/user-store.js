@@ -40,7 +40,7 @@ export const useUserStore = defineStore('user', {
       } finally {
         Loading.hide()
       }
-    }
+    },
   },
   persist: true
 })

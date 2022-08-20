@@ -1,24 +1,23 @@
 <template>
   <q-page class="row flex-center">
-    <div class="col-8 text-center">
-      <q-form @submit="onSubmit" @reset="onReset">
-        <q-input label="E-mail" v-model="form.email" />
+    <div class="col-12 col-md-4 col-lg-3 text-center q-pa-md">
+      <div class="text-h3 q-mb-lg">Crie seu usuário</div>
+      <q-form @submit="beforeSubmit(v$)" @reset="onReset">
+        <q-input label="E-mail" v-model="v$.email.$model"
+          :error="v$.email.$error" error-message="Insira um email válido" />
 
-        <q-input label="Nome" v-model="form.name" />
+        <q-input label="Nome" v-model="v$.name.$model" :error="v$.name.$error"
+          error-message="Insira um nome válido" />
 
-        <q-select label="Gênero" :options="genderOptions" v-model="form.gender"
-          emit-value />
-
-        <q-toggle :label="form.status" false-value="inactive"
-          true-value="active" v-model="form.status" />
+        <q-select label="Gênero" :options="genderOptions"
+          v-model="v$.gender.$model" emit-value :error="v$.gender.$error"
+          error-message="Insira um gênero" />
 
         <div class="q-mt-md">
-          <q-btn label="Enviar" type="submit" color="primary" />
           <q-btn label="Limpar" type="reset" color="primary" flat />
+          <q-btn label="Enviar" type="submit" color="primary" />
         </div>
       </q-form>
-    </div>
-    <div class="col-8">
     </div>
   </q-page>
 </template>
@@ -29,6 +28,9 @@ import { defineComponent, reactive } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { useUserStore } from 'src/stores/user-store'
+
+import useVuelidate from '@vuelidate/core'
+import { required, minLength, email } from '@vuelidate/validators'
 
 export default defineComponent({
   name: 'UserForm',
@@ -53,6 +55,13 @@ export default defineComponent({
       gender: '',
       status: 'active'
     })
+    const rules = {
+      email: { required, email },
+      name: { required, minLength: minLength(4) },
+      gender: { required }
+    }
+
+    const v$ = useVuelidate(rules, form)
 
     const onSubmit = async () => {
       $q.loading.show()
@@ -75,7 +84,21 @@ export default defineComponent({
       form.gender = ''
     }
 
-    return { form, genderOptions, onSubmit, onReset }
+    async function beforeSubmit(v) {
+      const isValid = await v.$validate()
+
+      if (!isValid) return
+
+      onSubmit()
+    }
+
+    return {
+      form,
+      genderOptions,
+      beforeSubmit,
+      onReset,
+      v$
+    }
   },
 })
 </script>
